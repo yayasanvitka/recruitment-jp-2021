@@ -29,8 +29,8 @@ Aplikasi ini adalah aplikasi untuk listing data Item
 Silahkan fork repositori ini, jalankan migrasi untuk database, dan seeder untuk user, Item Groups, Item Brands, dan Items.
 
 Lakukan <strong>Pull Request</strong> untuk challange di bawah ini:
-1. Buat Migrasi, Model dan CRUD untuk item_tags.
-2. Relasikan items dengan item_tags (database relation & CRUD).
+1. Buat Migrasi, Model dan CRUD untuk Tags. Tabel ini hanya memiliki column `name` selain primary dan timestamp.
+2. Relasikan items dengan tags (database relation & CRUD, _many-to-many_) dan intermediate table _item_tags_.
 3. Perbaiki Validasi pada CRUD Items.
 4. Perbaiki sorting untuk _Item Group_ pada _/item/brand_ dan _Item Brand_ pada _/item/item_
 
