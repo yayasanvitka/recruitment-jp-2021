@@ -32,6 +32,7 @@ class ItemRequest extends FormRequest
                 'size:8',
             ],
             'name' => 'required|min:5|max:255',
+            'tag' => 'required',
         ];
     }
 

@@ -49,6 +49,11 @@ class Item extends Model
         return $this->belongsTo(ItemBrand::class, 'brand_id', 'id');
     }
 
+    public function tag()
+    {
+        return $this->belongsToMany(ItemTag::class, 'item_tags', 'item_id', 'tag_id');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
