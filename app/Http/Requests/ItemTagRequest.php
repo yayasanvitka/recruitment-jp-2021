@@ -4,8 +4,9 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class ItemRequest extends FormRequest
+class ItemTagRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,13 +27,7 @@ class ItemRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => [
-                'required',
-                'string',
-                'size:8',
-            ],
             'name' => 'required|min:5|max:255',
-            'tag' => 'required',
         ];
     }
 
