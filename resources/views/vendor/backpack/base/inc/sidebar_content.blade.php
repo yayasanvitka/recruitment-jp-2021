@@ -21,6 +21,11 @@
             </a>
         </li>
         <li class='nav-item'>
+            <a class='nav-link' href='{{ backpack_url('item/tag') }}'>
+                <i class='nav-icon la la-tag'></i> Tags
+            </a>
+        </li>
+        <li class='nav-item'>
             <a class='nav-link' href='{{ backpack_url('item/item') }}'>
                 <i class='nav-icon la la-box'></i> Items
             </a>
