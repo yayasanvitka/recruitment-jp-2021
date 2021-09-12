@@ -16,6 +16,12 @@ class CreateItemTagsTable extends Migration
         Schema::create('item_tags', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('item_id');
+            $table->foreign('item_id')
+                ->references('id')
+                ->on('items')
+                ->onDelete('restrict')
+                ->default(0);
             $table->string('name');
         });
     }

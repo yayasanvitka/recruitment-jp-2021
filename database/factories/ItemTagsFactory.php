@@ -23,6 +23,7 @@ class ItemTagsFactory extends Factory
     public function definition()
     {
         return [
+            'item_id' => $this->faker->randomElement(Item::pluck('id')->toArray()),
             'name' => $this->faker->words(2, true),
         ];
     }
