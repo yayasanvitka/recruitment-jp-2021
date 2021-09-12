@@ -57,6 +57,15 @@ class ItemCrudController extends CrudController
                 'label' => 'Name',
                 'name' => 'name',
             ],
+
+            [  
+                'label'        => 'Tags',
+                'name'         => 'tags',
+                'type'         => 'relationship',
+                'entity'    => 'tags',
+                'attribute' => 'name',
+                'model' => App\Models\Tag::class,
+             ],
         ]);
     }
 
@@ -103,6 +112,16 @@ class ItemCrudController extends CrudController
                 'label' => 'Name',
                 'name' => 'name',
             ],
+            [
+                'label' => 'Tags',
+                'name' => 'tags',
+                'type' => 'select_multiple',
+                'entity' => 'tags',
+                'model' => "App\Models\Tag",
+                'attribute' => 'name',
+                'pivot'     => true,
+                
+            ]
         ]);
     }
 
