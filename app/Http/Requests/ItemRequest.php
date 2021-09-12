@@ -26,9 +26,11 @@ class ItemRequest extends FormRequest
     public function rules()
     {
         return [
+            'brand_id' => 'required',
             'code' => [
                 'required',
                 'string',
+                'unique:items,code',
                 'size:8',
             ],
             'name' => 'required|min:5|max:255',
