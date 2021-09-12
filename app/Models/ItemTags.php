@@ -17,11 +17,18 @@ class ItemTags extends Model
     protected $guarded = ['id'];
     protected $primaryKey = 'id';
     protected $fillable = [
-        'name'
+        'name',
+        'item_id'
     ];
 
     protected $dates = [
         'created_at',
         'updated_at',
     ];
+
+
+    public function group()
+    {
+        return $this->belongsTo(Item::class, 'item_id', 'id');
+    }
 }
