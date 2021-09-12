@@ -6,9 +6,9 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model
+class ItemTag extends Model
 {
-    use CrudTrait;
+	use CrudTrait;
     use HasFactory;
 
     /*
@@ -17,11 +17,9 @@ class Item extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'items';
+    protected $table = 'tags';
     protected $guarded = ['id'];
     protected $fillable = [
-        'brand_id',
-        'code',
         'name',
     ];
     protected $dates = [
@@ -41,17 +39,9 @@ class Item extends Model
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function group()
+    public function item()
     {
-        return $this->belongsTo(ItemBrand::class, 'brand_id', 'id');
-    }
-
-    public function tag()
-    {
-        return $this->belongsToMany(ItemTag::class, 'item_tags', 'item_id', 'tag_id');
+        return $this->belongsToMany(Item::class, 'item_tags', 'item_id', 'tag_id');
     }
 
     /*

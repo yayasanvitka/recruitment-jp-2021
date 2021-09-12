@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ItemRequest;
 use App\Models\ItemBrand;
+use App\Models\ItemTag;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -48,6 +49,10 @@ class ItemCrudController extends CrudController
                 'name' => 'brand_id',
                 'type' => 'select_from_array',
                 'options' => ItemBrand::pluck('name', 'id'),
+                'orderLogic' => function ($query, $column, $columnDirection) {
+                    return $query->leftJoin('item_brands', 'items.brand_id', '=', 'item_brands.id')
+                        ->orderBy('item_brands.name', $columnDirection)->select('items.*');
+                }
             ],
             [
                 'label' => 'Code',
@@ -56,6 +61,20 @@ class ItemCrudController extends CrudController
             [
                 'label' => 'Name',
                 'name' => 'name',
+            ],
+            [
+                'label' => 'Tags',
+                'name' => 'tag',
+            ],
+        ]);
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->crud->addColumns([
+            [
+                'label' => 'Tags',
+                'name' => 'tag',
             ],
         ]);
     }
@@ -73,6 +92,18 @@ class ItemCrudController extends CrudController
             return ItemBrand::orderBy('name', 'ASC')->pluck('name', 'id')->toArray();
         }, function ($value) {
             $this->crud->addClause('where', 'brand_id', $value);
+        });
+
+        $this->crud->addFilter([
+            'name' => 'tag',
+            'type' => 'dropdown',
+            'label' => 'Tag',
+        ], function () {
+            return ItemTag::orderBy('name', 'ASC')->pluck('name', 'id')->toArray();
+        }, function ($value) {
+            $this->crud->query = $this->crud->query->whereHas('tag', function ($query) use ($value) {
+                $query->where('tag_id', $value);
+            });
         });
     }
 
@@ -102,6 +133,11 @@ class ItemCrudController extends CrudController
             [
                 'label' => 'Name',
                 'name' => 'name',
+            ],
+            [
+                'label' => 'Tags',
+                'name' => 'tag',
+                'type' => 'relationship',
             ],
         ]);
     }
