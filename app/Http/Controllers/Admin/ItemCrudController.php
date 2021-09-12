@@ -41,13 +41,17 @@ class ItemCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->addFilters();
-
         $this->crud->addColumns([
             [
                 'label' => 'Brand',
                 'name' => 'brand_id',
                 'type' => 'select_from_array',
                 'options' => ItemBrand::pluck('name', 'id'),
+                'orderable'  => true,
+                'orderLogic' => function ($query, $column, $columnDirection) {
+                    return $query->leftJoin('item_brands', 'items.brand_id', '=', 'item_brands.id')
+                    ->orderBy('item_brands.name', $columnDirection)->select('items.*');
+                 }
             ],
             [
                 'label' => 'Code',
