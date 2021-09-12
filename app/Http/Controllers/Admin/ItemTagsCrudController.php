@@ -29,6 +29,7 @@ class ItemTagsCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\ItemTags::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/item/itemTag');
+        CRUD::setEntityNameStrings('item', 'items');
     }
 
     /**
@@ -43,6 +44,12 @@ class ItemTagsCrudController extends CrudController
 
         $this->crud->addColumns([
             [
+                'label' => 'Item',
+                'name' => 'item_id',
+                'type' => 'select_from_array',
+                'options' => Item::pluck('name', 'id'),
+            ],
+            [
                 'label' => 'Name',
                 'name' => 'name',
             ],
@@ -54,6 +61,15 @@ class ItemTagsCrudController extends CrudController
      */
     private function addFilters()
     {
+        $this->crud->addFilter([
+            'name' => 'item',
+            'type' => 'dropdown',
+            'label' => 'Item',
+        ], function () {
+            return Item::orderBy('name', 'ASC')->pluck('name', 'id')->toArray();
+        }, function ($value) {
+            $this->crud->addClause('where', 'item_id', $value);
+        });
     }
 
     /**
@@ -67,6 +83,13 @@ class ItemTagsCrudController extends CrudController
         CRUD::setValidation(ItemTagsRequest::class);
 
         $this->crud->addFields([
+            [
+                'label' => 'Item',
+                'name' => 'item_id',
+                'type' => 'select2_from_array',
+                'options' => Item::orderBy('name', 'ASC')->pluck('name', 'id'),
+                'allows_null' => true,
+            ],
             [
                 'label' => 'Name',
                 'name' => 'name',
