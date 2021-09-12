@@ -27,6 +27,11 @@ class Tag extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function items()
+    {
+        return $this->belongsToMany(Item::class, 'item_tags', 'tag_id', 'item_id');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

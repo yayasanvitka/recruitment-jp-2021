@@ -40,6 +40,16 @@ class TagCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::setFromDb(); // columns
+        $this->crud->addColumn(
+            [  
+                'label'        => 'Items',
+                'name'         => 'items',
+                'type'         => 'relationship',
+                'entity'    => 'items',
+                'attribute' => 'name',
+                'model' => App\Models\Item::class,
+             ],
+        );
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -59,12 +69,40 @@ class TagCrudController extends CrudController
         CRUD::setValidation(TagRequest::class);
 
         CRUD::setFromDb(); // fields
+        $this->crud->addFields([
+            [
+                'label' => 'Items',
+                'name' => 'items',
+                'type' => 'select_multiple',
+                'entity' => 'items',
+                'model' => "App\Models\Item",
+                'attribute' => 'name',
+                'pivot'     => true,
+                
+            ]
+            ]);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
          * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
          */
+    }
+
+    protected function setupShowOperation()
+    {
+        CRUD::setFromDb();
+        $this->crud->addColumn(
+            [  
+                'label'        => 'Items',
+                'name'         => 'items',
+                'type'         => 'relationship',
+                'entity'    => 'items',
+                'attribute' => 'name',
+                'model' => App\Models\Item::class,
+             ],
+        );
+
     }
 
     /**
