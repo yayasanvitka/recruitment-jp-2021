@@ -3,13 +3,11 @@
 namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model
+class Tag extends Model
 {
     use CrudTrait;
-    use HasFactory;
 
     /*
     |--------------------------------------------------------------------------
@@ -17,17 +15,11 @@ class Item extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'items';
+    protected $table = 'tags';
+    protected $primaryKey = 'id';
     protected $guarded = ['id'];
-    protected $fillable = [
-        'brand_id',
-        'code',
-        'name',
-    ];
-    protected $dates = [
-        'created_at',
-        'updated_at',
-    ];
+    protected $fillable = ['name'];
+    protected $dates = ['created_at', 'updated_at',];
 
     /*
     |--------------------------------------------------------------------------
@@ -35,9 +27,9 @@ class Item extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function tags()
+    public function items()
     {
-        return $this->belongsToMany(Tag::class, 'item_tags', 'item_id', 'tag_id');
+        return $this->belongsToMany(Item::class, 'item_tags', 'tag_id', 'item_id');
     }
 
     /*
@@ -45,14 +37,6 @@ class Item extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function group()
-    {
-        return $this->belongsTo(ItemBrand::class, 'brand_id', 'id');
-    }
 
     /*
     |--------------------------------------------------------------------------
