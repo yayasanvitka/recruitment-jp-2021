@@ -48,6 +48,11 @@ class ItemBrandCrudController extends CrudController
                 'name' => 'group_id',
                 'type' => 'select_from_array',
                 'options' => ItemGroup::pluck('name', 'id'),
+                'orderable'  => true,
+                'orderLogic' => function ($query, $column, $columnDirection) {
+                    return $query->leftJoin('item_groups', 'item_brands.group_id', '=', 'item_groups.id')
+                    ->orderBy('item_groups.name', $columnDirection)->select('item_brands.*');
+                 }
             ],
             [
                 'label' => 'Code',
