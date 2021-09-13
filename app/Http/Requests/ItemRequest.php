@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ItemRequest extends FormRequest
 {
@@ -26,10 +27,14 @@ class ItemRequest extends FormRequest
     public function rules()
     {
         return [
+            'brand_id' => [
+                'required'
+            ],
             'code' => [
                 'required',
                 'string',
                 'size:8',
+                Rule::unique('items', 'code')->ignore(request()->id),
             ],
             'name' => 'required|min:5|max:255',
         ];
