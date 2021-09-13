@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ItemTagsRequest;
 use App\Models\Item;
+use App\Models\Tags;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -28,8 +29,8 @@ class ItemTagsCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\ItemTags::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/item/itemTag');
-        CRUD::setEntityNameStrings('item', 'items');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/item/tag');
+        CRUD::setEntityNameStrings('tag', 'tags');
     }
 
     /**
@@ -48,6 +49,12 @@ class ItemTagsCrudController extends CrudController
                 'name' => 'item_id',
                 'type' => 'select_from_array',
                 'options' => Item::pluck('name', 'id'),
+            ],
+            [
+                'label' => 'Tag',
+                'name' => 'tag_id',
+                'type' => 'select_from_array',
+                'options' => Tags::pluck('name', 'id'),
             ],
             [
                 'label' => 'Name',
@@ -70,6 +77,16 @@ class ItemTagsCrudController extends CrudController
         }, function ($value) {
             $this->crud->addClause('where', 'item_id', $value);
         });
+
+        $this->crud->addFilter([
+            'name' => 'tag',
+            'type' => 'dropdown',
+            'label' => 'Tag',
+        ], function () {
+            return Tags::orderBy('name', 'ASC')->pluck('name', 'id')->toArray();
+        }, function ($value) {
+            $this->crud->addClause('where', 'tag_id', $value);
+        });
     }
 
     /**
@@ -88,6 +105,13 @@ class ItemTagsCrudController extends CrudController
                 'name' => 'item_id',
                 'type' => 'select2_from_array',
                 'options' => Item::orderBy('name', 'ASC')->pluck('name', 'id'),
+                'allows_null' => true,
+            ],
+            [
+                'label' => 'Tag',
+                'name' => 'tag_id',
+                'type' => 'select2_from_array',
+                'options' => Tags::orderBy('name', 'ASC')->pluck('name', 'id'),
                 'allows_null' => true,
             ],
             [

@@ -17,5 +17,5 @@ Route::group([
     Route::crud('item/group', 'ItemGroupCrudController');
     Route::crud('item/brand', 'ItemBrandCrudController');
     Route::crud('item/item', 'ItemCrudController');
-    Route::crud('item/itemTag', 'ItemTagsCrudController');
+    Route::crud('item/tag', 'ItemTagsCrudController');
 }); // this should be the absolute last line of this file
