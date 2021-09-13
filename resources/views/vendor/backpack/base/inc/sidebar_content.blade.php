@@ -25,5 +25,15 @@
                 <i class='nav-icon la la-box'></i> Items
             </a>
         </li>
+        {{-- <li class='nav-item'>
+            <a class='nav-link' href='{{ backpack_url('item/itemTag') }}'>
+                <i class='nav-icon la la-box'></i> Item Tag
+            </a>
+        </li> --}}
+         <li class='nav-item'>
+            <a class='nav-link' href='{{ backpack_url('item/tag') }}'>
+                <i class='nav-icon la la-box'></i> Tags
+            </a>
+        </li>
     </ul>
 </li>
