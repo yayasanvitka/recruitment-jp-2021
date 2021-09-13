@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\ItemBrandRequest;
-use App\Models\ItemGroup;
+use App\Http\Requests\ItemTagsRequest;
+use App\Models\Item;
+use App\Models\Tags;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class ItemBrandCrudController
+ * Class ItemCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class ItemBrandCrudController extends CrudController
+class ItemTagsCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -27,9 +28,9 @@ class ItemBrandCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\ItemBrand::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/item/brand');
-        CRUD::setEntityNameStrings('item brand', 'item brands');
+        CRUD::setModel(\App\Models\ItemTags::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/item/tag');
+        CRUD::setEntityNameStrings('tag', 'tags');
     }
 
     /**
@@ -44,32 +45,20 @@ class ItemBrandCrudController extends CrudController
 
         $this->crud->addColumns([
             [
-                'label' => 'Group',
-                'name' => 'group_id',
+                'label' => 'Item',
+                'name' => 'item_id',
                 'type' => 'select_from_array',
-                'options' => ItemGroup::pluck('name', 'id'),
-                'orderLogic' => function ($query, $column, $columnDirection) {
-                    return $query->leftJoin('item_groups', 'item_brands.group_id', '=', 'item_groups.id')
-                        ->orderBy('item_groups.name', $columnDirection)->select('item_brands.*');
-                }
+                'options' => Item::pluck('name', 'id'),
             ],
             [
-                'label' => 'Code',
-                'name' => 'code',
+                'label' => 'Tag',
+                'name' => 'tag_id',
+                'type' => 'select_from_array',
+                'options' => Tags::pluck('name', 'id'),
             ],
             [
                 'label' => 'Name',
                 'name' => 'name',
-            ],
-            [
-                'name' => 'items',
-                'type' => 'relationship_count',
-                'label' => 'Items',
-                'wrapper' => [
-                    'href' => function ($crud, $column, $entry, $related_key) {
-                        return backpack_url('item/item?brand='.$entry->getKey());
-                    },
-                ],
             ],
         ]);
     }
@@ -80,13 +69,23 @@ class ItemBrandCrudController extends CrudController
     private function addFilters()
     {
         $this->crud->addFilter([
-            'name' => 'group',
+            'name' => 'item',
             'type' => 'dropdown',
-            'label' => 'Group',
+            'label' => 'Item',
         ], function () {
-            return ItemGroup::orderBy('name', 'ASC')->pluck('name', 'id')->toArray();
+            return Item::orderBy('name', 'ASC')->pluck('name', 'id')->toArray();
         }, function ($value) {
-            $this->crud->addClause('where', 'group_id', $value);
+            $this->crud->addClause('where', 'item_id', $value);
+        });
+
+        $this->crud->addFilter([
+            'name' => 'tag',
+            'type' => 'dropdown',
+            'label' => 'Tag',
+        ], function () {
+            return Tags::orderBy('name', 'ASC')->pluck('name', 'id')->toArray();
+        }, function ($value) {
+            $this->crud->addClause('where', 'tag_id', $value);
         });
     }
 
@@ -98,20 +97,22 @@ class ItemBrandCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(ItemBrandRequest::class);
+        CRUD::setValidation(ItemTagsRequest::class);
 
         $this->crud->addFields([
             [
-                'label' => 'Group',
-                'name' => 'group_id',
+                'label' => 'Item',
+                'name' => 'item_id',
                 'type' => 'select2_from_array',
-                'options' => ItemGroup::orderBy('name', 'ASC')->pluck('name', 'id'),
+                'options' => Item::orderBy('name', 'ASC')->pluck('name', 'id'),
                 'allows_null' => true,
             ],
             [
-                'label' => 'Code',
-                'name' => 'code',
-                'hint' => 'The code must be unique',
+                'label' => 'Tag',
+                'name' => 'tag_id',
+                'type' => 'select2_from_array',
+                'options' => Tags::orderBy('name', 'ASC')->pluck('name', 'id'),
+                'allows_null' => true,
             ],
             [
                 'label' => 'Name',
