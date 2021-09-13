@@ -6,20 +6,18 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ItemTags extends Model
+class Tags extends Model
 {
     use CrudTrait;
     use HasFactory;
 
     // use TrackableTrait;
 
-    protected $table = 'item_tags';
+    protected $table = 'tags';
     protected $guarded = ['id'];
     protected $primaryKey = 'id';
     protected $fillable = [
-        'name',
-        'item_id',
-        'tag_id'
+        'name'
     ];
 
     protected $dates = [
@@ -28,13 +26,8 @@ class ItemTags extends Model
     ];
 
 
-    public function Item()
+    public function group()
     {
-        return $this->belongsTo(Item::class, 'item_id', 'id');
-    }
-
-    public function tag()
-    {
-        return $this->belongsTo(Tags::class, 'tag_id', 'id');
+        return $this->belongsTo(Item::class, 'item_Tags', 'id');
     }
 }

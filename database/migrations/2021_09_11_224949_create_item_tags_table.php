@@ -22,6 +22,12 @@ class CreateItemTagsTable extends Migration
                 ->on('items')
                 ->onDelete('restrict')
                 ->default(0);
+            $table->unsignedBigInteger('tag_id');
+            $table->foreign('tag_id')
+                ->references('id')
+                ->onDelete('restrict')
+                ->on('tags')
+                ->nullable();
             $table->string('name');
         });
     }
